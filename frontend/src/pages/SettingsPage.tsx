@@ -24,7 +24,7 @@ export default function SettingsPage() {
   })
 
   // 2FA state
-  const [twoFAEnabled, setTwoFAEnabled] = useState(user?.two_factor_enabled || false)
+  const [twoFAEnabled, setTwoFAEnabled] = useState(user?.twoFactorEnabled || false)
   const [qrCode, setQrCode] = useState('')
   const [verifyCode, setVerifyCode] = useState('')
   const [showQR, setShowQR] = useState(false)
