@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"github.com/pquerna/otp"
 	"github.com/pquerna/otp/totp"
 )
 

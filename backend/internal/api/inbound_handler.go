@@ -56,11 +56,7 @@ func (h *InboundHandler) CreateInbound(c *gin.Context) {
 	}
 
 	// Audit log
-	h.auditService.Log(user.ID, "inbound.create", c.ClientIP(), gin.H{
-		"tag":      inbound.Tag,
-		"protocol": inbound.Protocol,
-		"port":     inbound.Port,
-	})
+	h.auditService.Log(user.ID, "inbound.create", inbound.Tag, "Inbound created", c.ClientIP(), c.Request.UserAgent())
 
 	c.JSON(http.StatusCreated, inbound)
 }
@@ -109,7 +105,7 @@ func (h *InboundHandler) ListInbounds(c *gin.Context) {
 
 	var userID *uuid.UUID
 	// Non-admin users can only see their own inbounds
-	if user.Role != auth.RoleAdmin {
+	if user.Role != models.RoleAdmin {
 		userID = &user.ID
 	}
 
@@ -162,9 +158,7 @@ func (h *InboundHandler) UpdateInbound(c *gin.Context) {
 	}
 
 	// Audit log
-	h.auditService.Log(user.ID, "inbound.update", c.ClientIP(), gin.H{
-		"id": id.String(),
-	})
+	h.auditService.Log(user.ID, "inbound.update", id.String(), "Inbound updated", c.ClientIP(), c.Request.UserAgent())
 
 	inbound, _ := h.inboundService.GetInbound(id)
 	c.JSON(http.StatusOK, inbound)
@@ -195,9 +189,7 @@ func (h *InboundHandler) DeleteInbound(c *gin.Context) {
 	}
 
 	// Audit log
-	h.auditService.Log(user.ID, "inbound.delete", c.ClientIP(), gin.H{
-		"id": id.String(),
-	})
+	h.auditService.Log(user.ID, "inbound.delete", id.String(), "Inbound deleted", c.ClientIP(), c.Request.UserAgent())
 
 	c.Status(http.StatusNoContent)
 }
@@ -236,10 +228,7 @@ func (h *InboundHandler) AddClient(c *gin.Context) {
 	}
 
 	// Audit log
-	h.auditService.Log(user.ID, "inbound.add_client", c.ClientIP(), gin.H{
-		"inbound_id": id.String(),
-		"email":      client.Email,
-	})
+	h.auditService.Log(user.ID, "inbound.add_client", client.Email, "Client added", c.ClientIP(), c.Request.UserAgent())
 
 	c.JSON(http.StatusOK, gin.H{"message": "client added successfully"})
 }
@@ -272,10 +261,7 @@ func (h *InboundHandler) RemoveClient(c *gin.Context) {
 	}
 
 	// Audit log
-	h.auditService.Log(user.ID, "inbound.remove_client", c.ClientIP(), gin.H{
-		"inbound_id": id.String(),
-		"email":      email,
-	})
+	h.auditService.Log(user.ID, "inbound.remove_client", email, "Client removed", c.ClientIP(), c.Request.UserAgent())
 
 	c.Status(http.StatusNoContent)
 }
@@ -350,10 +336,7 @@ func (h *InboundHandler) ToggleInbound(c *gin.Context) {
 	}
 
 	// Audit log
-	h.auditService.Log(user.ID, "inbound.toggle", c.ClientIP(), gin.H{
-		"id":     id.String(),
-		"enable": body.Enable,
-	})
+	h.auditService.Log(user.ID, "inbound.toggle", id.String(), "Inbound toggled", c.ClientIP(), c.Request.UserAgent())
 
 	c.JSON(http.StatusOK, gin.H{"message": "inbound toggled successfully"})
 }

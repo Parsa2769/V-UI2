@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"go.uber.org/zap"
-	"golang.org/x/crypto/acme"
 	"golang.org/x/crypto/acme/autocert"
 )
 

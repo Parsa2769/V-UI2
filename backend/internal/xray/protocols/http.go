@@ -1,9 +1,7 @@
 package protocols
 
 import (
-	"encoding/base64"
 	"fmt"
-	"net/url"
 
 	"github.com/v-ui/backend/internal/models"
 )

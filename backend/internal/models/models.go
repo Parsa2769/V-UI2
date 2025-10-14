@@ -121,9 +121,10 @@ type RefreshToken struct {
 type ConfigTemplate struct {
 	ID          uuid.UUID `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
 	Name        string    `gorm:"uniqueIndex;not null" json:"name"`
+	Type        string    `gorm:"not null" json:"type"` // e.g., "inbound", "outbound", "security"
 	Protocol    Protocol  `gorm:"not null" json:"protocol"`
 	Description string    `gorm:"type:text" json:"description"`
-	Template    string    `gorm:"type:text;not null" json:"template"`
+	Config      string    `gorm:"type:text;not null" json:"config"` // JSON or YAML config
 	IsDefault   bool      `gorm:"default:false" json:"is_default"`
 	CreatedBy   uuid.UUID `gorm:"type:uuid" json:"created_by"`
 	CreatedAt   time.Time `json:"created_at"`

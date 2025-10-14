@@ -42,9 +42,7 @@ func (h *BackupHandler) CreateBackup(c *gin.Context) {
 	}
 
 	// Audit log
-	h.auditService.Log(user.ID, "backup.create", c.ClientIP(), gin.H{
-		"filename": filename,
-	})
+	h.auditService.Log(user.ID, "backup.create", filename, "Backup created", c.ClientIP(), c.Request.UserAgent())
 
 	c.JSON(http.StatusOK, gin.H{
 		"message":  "backup created successfully",
@@ -101,9 +99,7 @@ func (h *BackupHandler) RestoreBackup(c *gin.Context) {
 	}
 
 	// Audit log
-	h.auditService.Log(user.ID, "backup.restore", c.ClientIP(), gin.H{
-		"filename": body.Filename,
-	})
+	h.auditService.Log(user.ID, "backup.restore", body.Filename, "Backup restored", c.ClientIP(), c.Request.UserAgent())
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "backup restored successfully",
@@ -129,9 +125,7 @@ func (h *BackupHandler) DeleteBackup(c *gin.Context) {
 	}
 
 	// Audit log
-	h.auditService.Log(user.ID, "backup.delete", c.ClientIP(), gin.H{
-		"filename": filename,
-	})
+	h.auditService.Log(user.ID, "backup.delete", filename, "Backup deleted", c.ClientIP(), c.Request.UserAgent())
 
 	c.Status(http.StatusNoContent)
 }
