@@ -10,7 +10,7 @@ RUN apk add --no-cache git make gcc musl-dev
 
 # Copy go mod files
 COPY backend/go.mod backend/go.sum ./
-RUN go mod download
+RUN go mod download && go mod tidy
 
 # Copy source code
 COPY backend/ ./
