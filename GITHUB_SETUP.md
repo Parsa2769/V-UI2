@@ -6,8 +6,8 @@
 2. روی + در گوشه بالا سمت راست کلیک کنید
 3. "New repository" را انتخاب کنید
 4. تنظیمات:
-   - **Repository name**: `3x-ui-modern`
-   - **Description**: `Modern fork of 3x-ui with enhanced UI and features`
+   - **Repository name**: `V-UI2`
+   - **Description**: `Modern Xray Management Panel - Fork of 3x-ui with enhanced UI and features`
    - **Visibility**: Public یا Private (به دلخواه)
    - **❌ Initialize with README را تیک نزنید** (چون ما README داریم)
 5. "Create repository" را کلیک کنید
@@ -50,7 +50,7 @@ Repository URL خودتون رو جایگزین کنید:
 
 ```bash
 # Remote repository رو اضافه کنید
-git remote add origin https://github.com/YOUR-USERNAME/3x-ui-modern.git
+git remote add origin https://github.com/Parsa2769/V-UI2.git
 
 # Branch اصلی رو به main تغییر بدید
 git branch -M main
@@ -64,8 +64,8 @@ git push -u origin main
 بعد از push کردن، به صفحه repository در GitHub برید و:
 
 ### 1. About بخش
-- **Description**: Modern fork of MHSanaei/3x-ui with enhanced UI, JWT auth, 2FA, RBAC, and production-ready features
-- **Website**: آدرس سرور خودتون (اگر داشته باشید)
+- **Description**: Modern Xray Management Panel - Fork of 3x-ui with enhanced UI, JWT auth, 2FA, RBAC, and production-ready features
+- **Website**: https://github.com/Parsa2769/V-UI2
 - **Topics** اضافه کنید:
   - `xray`
   - `v2ray`
@@ -104,13 +104,10 @@ Settings → Branches → Add rule:
 فایل README.md رو باز کنید و این موارد رو update کنید:
 
 ```markdown
-# جایگزین کنید:
-https://github.com/yourusername/3x-ui-modern
-# با:
-https://github.com/YOUR-ACTUAL-USERNAME/3x-ui-modern
+# تمام لینک‌های yourusername به Parsa2769/V-UI2 تغییر داده شد
 
-# دستور نصب تک‌خطی رو update کنید:
-bash <(curl -fsSL https://raw.githubusercontent.com/YOUR-USERNAME/3x-ui-modern/main/install-ubuntu.sh)
+# دستور نصب تک‌خطی:
+bash <(curl -Ls https://raw.githubusercontent.com/Parsa2769/V-UI2/main/install.sh)
 ```
 
 ## مرحله 7: Commit تغییرات README
@@ -127,7 +124,7 @@ git push
 
 ```bash
 # روی سرور Ubuntu
-bash <(curl -fsSL https://raw.githubusercontent.com/YOUR-USERNAME/3x-ui-modern/main/install-ubuntu.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/Parsa2769/V-UI2/main/install.sh)
 ```
 
 ## دستورات مفید برای بعداً

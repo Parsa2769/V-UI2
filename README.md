@@ -62,8 +62,8 @@ Based on the popular [3x-ui](https://github.com/MHSanaei/3x-ui) project, V-UI of
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/3x-ui-modern.git
-cd 3x-ui-modern
+git clone https://github.com/Parsa2769/V-UI2.git
+cd V-UI2
 
 # Copy environment file
 cp .env.example .env
@@ -307,8 +307,8 @@ GPL-3.0 License - see [LICENSE](LICENSE) file.
 
 ```bash
 # کلون کردن مخزن
-git clone https://github.com/yourusername/3x-ui-modern.git
-cd 3x-ui-modern
+git clone https://github.com/Parsa2769/V-UI2.git
+cd V-UI2
 
 # کپی کردن فایل محیطی
 cp .env.example .env
@@ -399,7 +399,7 @@ npm run test:e2e
 ## 📞 Support
 
 - 📖 [Documentation](./docs)
-- 🐛 [Issue Tracker](https://github.com/yourusername/3x-ui-modern/issues)
-- 💬 [Discussions](https://github.com/yourusername/3x-ui-modern/discussions)
+- 🐛 [Issue Tracker](https://github.com/Parsa2769/V-UI2/issues)
+- 💬 [Discussions](https://github.com/Parsa2769/V-UI2/discussions)
 
 **Remember**: Use responsibly and legally. This project is for legitimate privacy and security purposes only.
