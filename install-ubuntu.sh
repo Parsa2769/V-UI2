@@ -97,10 +97,25 @@ if ! command -v docker &> /dev/null; then
     fi
     
     echo -e "${GREEN}✓ Docker installed successfully${NC}"
+    
+    # Start Docker service
+    echo -e "   Starting Docker service..."
+    $SUDO systemctl start docker
+    $SUDO systemctl enable docker
+    
     echo -e "${YELLOW}⚠️  Please log out and log back in for docker group changes to take effect${NC}"
 else
     echo -e "${GREEN}✓ Docker is already installed${NC}"
+    
+    # Make sure Docker service is running
+    if ! $SUDO systemctl is-active --quiet docker; then
+        echo -e "   Starting Docker service..."
+        $SUDO systemctl start docker
+    fi
 fi
+
+# Ensure docker command is available in PATH
+export PATH="/usr/bin:/usr/local/bin:$PATH"
 
 # Check Docker Compose
 echo ""
@@ -176,7 +191,30 @@ echo -e "${YELLOW}🏗️  Building Docker images...${NC}"
 echo "   This may take 5-10 minutes on first run..."
 echo "   (Downloading Go, Node.js, and building both backend and frontend)"
 
-if docker compose build --no-cache 2>&1 | grep -E "(Step|Successfully)" || docker compose build --no-cache; then
+# Ensure we can find docker and docker-compose
+DOCKER_CMD="docker"
+COMPOSE_CMD="docker compose"
+
+# Try different compose commands
+if ! command -v docker &> /dev/null; then
+    if [ -x "/usr/bin/docker" ]; then
+        DOCKER_CMD="/usr/bin/docker"
+        COMPOSE_CMD="/usr/bin/docker compose"
+    else
+        echo -e "${RED}❌ Docker command not found${NC}"
+        echo "   Please restart your shell or run: export PATH=/usr/bin:\$PATH"
+        exit 1
+    fi
+fi
+
+# Check if we can use docker-compose (standalone) instead
+if ! $COMPOSE_CMD version &> /dev/null; then
+    if command -v docker-compose &> /dev/null; then
+        COMPOSE_CMD="docker-compose"
+    fi
+fi
+
+if $COMPOSE_CMD build --no-cache 2>&1 | grep -E "(Step|Successfully)" || $COMPOSE_CMD build --no-cache; then
     echo -e "${GREEN}✓ Docker images built successfully${NC}"
 else
     echo -e "${RED}❌ Failed to build Docker images${NC}"
@@ -187,11 +225,11 @@ fi
 echo ""
 echo -e "${YELLOW}🚀 Starting services...${NC}"
 
-if docker compose up -d 2>&1; then
+if $COMPOSE_CMD up -d 2>&1; then
     echo -e "${GREEN}✓ Services started successfully${NC}"
 else
     echo -e "${RED}❌ Failed to start services${NC}"
-    echo "   Run: docker compose logs"
+    echo "   Run: $COMPOSE_CMD logs"
     exit 1
 fi
 

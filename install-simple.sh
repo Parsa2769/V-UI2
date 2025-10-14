@@ -60,10 +60,22 @@ if ! command -v docker &> /dev/null; then
     $SUDO apt-get update -y
     $SUDO apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     
+    # Start Docker service
+    $SUDO systemctl start docker
+    $SUDO systemctl enable docker
+    
     echo -e "${GREEN}✓ Docker installed${NC}"
 else
     echo -e "${BLUE}[3/7]${NC} ${GREEN}✓ Docker already installed${NC}"
+    
+    # Ensure Docker is running
+    if ! $SUDO systemctl is-active --quiet docker; then
+        $SUDO systemctl start docker
+    fi
 fi
+
+# Ensure docker in PATH
+export PATH="/usr/bin:/usr/local/bin:$PATH"
 
 # Check Docker Compose
 if ! docker compose version &> /dev/null; then
@@ -111,13 +123,22 @@ echo ""
 # 6. Build
 echo -e "${BLUE}[6/7]${NC} ${YELLOW}Building Docker images...${NC}"
 echo -e "${YELLOW}   This will take 5-10 minutes...${NC}"
-docker compose build
+
+# Determine which compose command to use
+COMPOSE_CMD="docker compose"
+if ! $COMPOSE_CMD version &> /dev/null; then
+    if command -v docker-compose &> /dev/null; then
+        COMPOSE_CMD="docker-compose"
+    fi
+fi
+
+$COMPOSE_CMD build
 echo -e "${GREEN}✓ Images built${NC}"
 echo ""
 
 # 7. Start
 echo -e "${BLUE}[7/7]${NC} ${YELLOW}Starting services...${NC}"
-docker compose up -d
+$COMPOSE_CMD up -d
 echo -e "${GREEN}✓ Services started${NC}"
 echo ""
 
