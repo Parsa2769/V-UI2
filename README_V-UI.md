@@ -4,8 +4,9 @@
 
 ![V-UI Logo](https://via.placeholder.com/150x150/4A90E2/FFFFFF?text=V-UI)
 
-[![Version](https://img.shields.io/badge/version-2.0.0-blue)](https://github.com/yourusername/v-ui)
+[![Version](https://img.shields.io/badge/version-2.0.0-blue)](https://github.com/Parsa2769/V-UI2)
 [![License](https://img.shields.io/badge/license-GPL--3.0-green)](./LICENSE)
+[![CI](https://github.com/Parsa2769/V-UI2/workflows/CI/badge.svg)](https://github.com/Parsa2769/V-UI2/actions)
 [![Go](https://img.shields.io/badge/Go-1.21-00ADD8?logo=go)](https://golang.org/)
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript)](https://www.typescriptlang.org/)
@@ -139,11 +140,13 @@
 ### 🛠️ DevOps
 - **Docker** multi-stage build
 - **Docker Compose** آماده
-- **GitHub Actions** CI/CD
-- **Automated Testing**
+- **GitHub Actions** CI/CD (simplified for v2.0.0)
+- **Automated Build** verification
 - **Health Checks**
 - **Prometheus** monitoring
 - **Grafana** dashboards (optional)
+
+> **📝 Note**: CI pipeline در نسخه 2.0.0 به صورت ساده شده است و فقط build را تست می‌کند. تست‌های کامل در نسخه‌های بعدی اضافه خواهند شد.
 
 ### 🧪 Testing
 - **Unit Tests** - تست‌های واحد برای Backend
@@ -207,15 +210,15 @@
 
 ```bash
 # دانلود و نصب خودکار
-bash <(curl -fsSL https://raw.githubusercontent.com/yourusername/v-ui/main/install-ubuntu.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/Parsa2769/V-UI2/main/install.sh)
 ```
 
 ### نصب دستی
 
 ```bash
 # 1. کلون پروژه
-git clone https://github.com/yourusername/v-ui.git
-cd v-ui
+git clone https://github.com/Parsa2769/V-UI2.git
+cd V-UI2
 
 # 2. کپی فایل تنظیمات
 cp .env.example .env
@@ -470,8 +473,8 @@ npm test
 
 ## 📞 پشتیبانی
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/v-ui/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/v-ui/discussions)
+- **Issues**: [GitHub Issues](https://github.com/Parsa2769/V-UI2/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/Parsa2769/V-UI2/discussions)
 - **Telegram**: [@vui_support](https://t.me/vui_support)
 
 ---
