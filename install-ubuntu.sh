@@ -1,13 +1,7 @@
 #!/bin/bash
 
-<<<<<<< HEAD
-# V-UI - Modern Xray Management Panel
-# Installation Script for Ubuntu/Debian
-# Tested on Ubuntu 20.04, 22.04, 24.04
-=======
 # V-UI - Complete Installation Script
 # Auto-installs Docker if not found
->>>>>>> 1a83f2e275b89d9fb23847d0787f205c8d23a281
 
 set -e
 
@@ -25,11 +19,7 @@ echo ""
 
 # Check if running as root
 if [[ $EUID -ne 0 ]]; then
-<<<<<<< HEAD
-   echo -e "${YELLOW}⚠️  Not running as root. Some commands may require sudo.${NC}"
-=======
    echo -e "${YELLOW}⚠️  Not running as root. Using sudo.${NC}"
->>>>>>> 1a83f2e275b89d9fb23847d0787f205c8d23a281
    SUDO='sudo'
 else
    echo -e "${GREEN}✓ Running as root${NC}"
@@ -47,56 +37,6 @@ OS_NAME=$(lsb_release -si)
 OS_VERSION=$(lsb_release -sr)
 echo -e "Detected OS: ${GREEN}$OS_NAME $OS_VERSION${NC}"
 echo ""
-<<<<<<< HEAD
-echo -e "${YELLOW}📦 Installing system dependencies...${NC}"
-
-# Update package list
-echo -e "   Updating package list..."
-$SUDO apt-get update -qq 2>&1 | grep -v "^Get:" | grep -v "^Hit:" || true
-
-# Install required packages
-echo -e "   Installing curl, wget, git, openssl..."
-$SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    curl \
-    wget \
-    unzip \
-    git \
-    ca-certificates \
-    gnupg \
-    lsb-release \
-    openssl 2>&1 | grep -E "(Setting up|Unpacking|already)" || true
-
-echo -e "${GREEN}✓ System dependencies installed${NC}"
-
-# Install Docker if not present
-if ! command -v docker &> /dev/null; then
-    echo ""
-    echo -e "${YELLOW}🐳 Installing Docker...${NC}"
-    
-    # Add Docker's official GPG key
-    echo -e "   Adding Docker GPG key..."
-    $SUDO mkdir -p /etc/apt/keyrings
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | $SUDO gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-    
-    # Set up the repository
-    echo -e "   Setting up Docker repository..."
-    echo \
-      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-      $(lsb_release -cs) stable" | $SUDO tee /etc/apt/sources.list.d/docker.list > /dev/null
-    
-    # Install Docker Engine
-    echo -e "   Installing Docker Engine (this may take a few minutes)..."
-    $SUDO apt-get update -qq 2>&1 | grep -v "^Get:" | grep -v "^Hit:" || true
-    $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin 2>&1 | grep -E "(Setting up|Unpacking|already)" || true
-    
-    # Add current user to docker group (if not root)
-    if [[ $EUID -ne 0 ]]; then
-        $SUDO usermod -aG docker $USER
-    fi
-    
-    echo -e "${GREEN}✓ Docker installed successfully${NC}"
-    echo -e "${YELLOW}⚠️  Please log out and log back in for docker group changes to take effect${NC}"
-=======
 
 # Install Docker if not present
 echo -e "${BLUE}[1/7]${NC} ${YELLOW}Checking Docker installation...${NC}"
@@ -116,7 +56,6 @@ elif command -v docker &> /dev/null; then
     DOCKER_BIN="docker"
     DOCKER_INSTALLED=true
     echo -e "   Docker found in PATH"
->>>>>>> 1a83f2e275b89d9fb23847d0787f205c8d23a281
 else
     echo -e "   ${YELLOW}Docker not found. Installing...${NC}"
 
@@ -239,17 +178,6 @@ fi
 
 # Build images
 echo ""
-<<<<<<< HEAD
-echo -e "${YELLOW}🏗️  Building Docker images...${NC}"
-echo "   This may take 5-10 minutes on first run..."
-echo "   (Downloading Go, Node.js, and building both backend and frontend)"
-
-if docker compose build --no-cache 2>&1 | grep -E "(Step|Successfully)" || docker compose build --no-cache; then
-    echo -e "${GREEN}✓ Docker images built successfully${NC}"
-else
-    echo -e "${RED}❌ Failed to build Docker images${NC}"
-    echo "   Check logs above for details"
-=======
 echo -e "${BLUE}[5/7]${NC} ${YELLOW}Building Docker images...${NC}"
 echo "   This takes 5-10 minutes (downloading Go, Node.js, building)..."
 
@@ -258,7 +186,6 @@ if $COMPOSE_CMD build --no-cache; then
 else
     echo -e "${RED}❌ Build failed${NC}"
     echo "   Check logs above for errors"
->>>>>>> 1a83f2e275b89d9fb23847d0787f205c8d23a281
     exit 1
 fi
 
@@ -266,19 +193,11 @@ fi
 echo ""
 echo -e "${BLUE}[6/7]${NC} ${YELLOW}Starting services...${NC}"
 
-<<<<<<< HEAD
-if docker compose up -d 2>&1; then
-    echo -e "${GREEN}✓ Services started successfully${NC}"
-else
-    echo -e "${RED}❌ Failed to start services${NC}"
-    echo "   Run: docker compose logs"
-=======
 if $COMPOSE_CMD up -d; then
     echo -e "${GREEN}✓ Services started${NC}"
 else
     echo -e "${RED}❌ Failed to start services${NC}"
     echo "   Run: $COMPOSE_CMD logs"
->>>>>>> 1a83f2e275b89d9fb23847d0787f205c8d23a281
     exit 1
 fi
 
@@ -314,19 +233,8 @@ echo -e "   Password: ${GREEN}admin${NC}"
 echo ""
 echo -e "${RED}⚠️  CHANGE PASSWORD IMMEDIATELY!${NC}"
 echo ""
-<<<<<<< HEAD
-echo "Useful Commands:"
-echo "  View logs:    docker compose logs -f"
-echo "  Stop:         docker compose down"
-echo "  Restart:      docker compose restart"
-echo "  Update:       git pull && docker compose up -d --build"
-echo "  Backup:       ./scripts/backup.sh"
-echo ""
-echo -e "${YELLOW}📚 Documentation: https://github.com/Parsa2769/V-UI2${NC}"
-=======
 echo -e "${BLUE}Useful Commands:${NC}"
 echo -e "  View logs:    ${YELLOW}$COMPOSE_CMD logs -f${NC}"
 echo -e "  Stop:         ${YELLOW}$COMPOSE_CMD down${NC}"
 echo -e "  Restart:      ${YELLOW}$COMPOSE_CMD restart${NC}"
->>>>>>> 1a83f2e275b89d9fb23847d0787f205c8d23a281
 echo ""

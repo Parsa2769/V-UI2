@@ -30,12 +30,8 @@ WORKDIR /build
 
 # Copy package files
 COPY frontend/package*.json ./
-<<<<<<< HEAD
-RUN npm ci
-=======
 # Install dependencies (works with or without package-lock.json)
 RUN npm install
->>>>>>> 1a83f2e275b89d9fb23847d0787f205c8d23a281
 
 # Copy source code
 COPY frontend/ ./

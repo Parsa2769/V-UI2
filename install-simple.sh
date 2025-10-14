@@ -46,11 +46,6 @@ if ! command -v docker &> /dev/null; then
     $SUDO mkdir -p /etc/apt/keyrings
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | $SUDO gpg --dearmor -o /etc/apt/keyrings/docker.gpg
     
-<<<<<<< HEAD
-    echo \
-      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-      $(lsb_release -cs) stable" | $SUDO tee /etc/apt/sources.list.d/docker.list > /dev/null
-=======
     # Get Ubuntu codename (fallback to noble for unsupported versions)
     UBUNTU_CODENAME=$(lsb_release -cs)
     if [[ "$UBUNTU_CODENAME" == "plucky" ]] || [[ ! "$UBUNTU_CODENAME" =~ ^(focal|jammy|noble)$ ]]; then
@@ -61,16 +56,10 @@ if ! command -v docker &> /dev/null; then
     echo \
       "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
       $UBUNTU_CODENAME stable" | $SUDO tee /etc/apt/sources.list.d/docker.list > /dev/null
->>>>>>> 1a83f2e275b89d9fb23847d0787f205c8d23a281
     
     $SUDO apt-get update -y
     $SUDO apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     
-<<<<<<< HEAD
-    echo -e "${GREEN}✓ Docker installed${NC}"
-else
-    echo -e "${BLUE}[3/7]${NC} ${GREEN}✓ Docker already installed${NC}"
-=======
     # Start Docker service
     $SUDO systemctl start docker
     $SUDO systemctl enable docker
@@ -96,7 +85,6 @@ if ! docker compose version &> /dev/null; then
     $SUDO chmod +x /usr/local/bin/docker-compose
     $SUDO ln -sf /usr/local/bin/docker-compose /usr/bin/docker-compose
     echo -e "${GREEN}✓ Docker Compose installed${NC}"
->>>>>>> 1a83f2e275b89d9fb23847d0787f205c8d23a281
 fi
 echo ""
 
@@ -135,9 +123,6 @@ echo ""
 # 6. Build
 echo -e "${BLUE}[6/7]${NC} ${YELLOW}Building Docker images...${NC}"
 echo -e "${YELLOW}   This will take 5-10 minutes...${NC}"
-<<<<<<< HEAD
-docker compose build
-=======
 
 # Determine which compose command to use
 COMPOSE_CMD="docker compose"
@@ -148,17 +133,12 @@ if ! $COMPOSE_CMD version &> /dev/null; then
 fi
 
 $COMPOSE_CMD build
->>>>>>> 1a83f2e275b89d9fb23847d0787f205c8d23a281
 echo -e "${GREEN}✓ Images built${NC}"
 echo ""
 
 # 7. Start
 echo -e "${BLUE}[7/7]${NC} ${YELLOW}Starting services...${NC}"
-<<<<<<< HEAD
-docker compose up -d
-=======
 $COMPOSE_CMD up -d
->>>>>>> 1a83f2e275b89d9fb23847d0787f205c8d23a281
 echo -e "${GREEN}✓ Services started${NC}"
 echo ""
 

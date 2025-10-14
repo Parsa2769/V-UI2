@@ -2,8 +2,6 @@
 
 ## مشکلات رایج نصب
 
-<<<<<<< HEAD
-=======
 ### 0. Docker Compose پیدا نمی‌شود (Ubuntu 25.04+)
 
 **علائم:**
@@ -24,7 +22,6 @@ sudo ln -sf /usr/local/bin/docker-compose /usr/bin/docker-compose
 docker compose version
 ```
 
->>>>>>> 1a83f2e275b89d9fb23847d0787f205c8d23a281
 ### 1. اسکریپت نصب گیر می‌کند
 
 **علائم:**
