@@ -98,24 +98,69 @@ if ! command -v docker &> /dev/null; then
     
     echo -e "${GREEN}✓ Docker installed successfully${NC}"
     
+    # Wait for Docker to be ready
+    echo -e "   Waiting for Docker daemon to initialize..."
+    sleep 3
+    
+    # Reload systemd
+    $SUDO systemctl daemon-reload
+    
     # Start Docker service
     echo -e "   Starting Docker service..."
-    $SUDO systemctl start docker
-    $SUDO systemctl enable docker
+    $SUDO systemctl start docker 2>/dev/null || true
+    $SUDO systemctl enable docker 2>/dev/null || true
+    
+    # Wait for Docker socket
+    for i in {1..10}; do
+        if $SUDO systemctl is-active --quiet docker 2>/dev/null; then
+            echo -e "${GREEN}   ✓ Docker service is running${NC}"
+            break
+        fi
+        sleep 1
+    done
     
     echo -e "${YELLOW}⚠️  Please log out and log back in for docker group changes to take effect${NC}"
 else
     echo -e "${GREEN}✓ Docker is already installed${NC}"
     
     # Make sure Docker service is running
-    if ! $SUDO systemctl is-active --quiet docker; then
+    if ! $SUDO systemctl is-active --quiet docker 2>/dev/null; then
         echo -e "   Starting Docker service..."
-        $SUDO systemctl start docker
+        $SUDO systemctl daemon-reload 2>/dev/null || true
+        $SUDO systemctl start docker 2>/dev/null || true
+        sleep 2
     fi
 fi
 
 # Ensure docker command is available in PATH
 export PATH="/usr/bin:/usr/local/bin:$PATH"
+
+# Verify Docker is working
+echo ""
+echo -e "${YELLOW}Verifying Docker installation...${NC}"
+if command -v docker &> /dev/null; then
+    if docker ps &> /dev/null; then
+        echo -e "${GREEN}✓ Docker is working correctly${NC}"
+    else
+        echo -e "${YELLOW}⚠️  Docker installed but daemon not responding${NC}"
+        echo -e "   Attempting to start Docker daemon..."
+        
+        # Try to start docker daemon directly
+        $SUDO dockerd &> /dev/null &
+        sleep 3
+        
+        if docker ps &> /dev/null; then
+            echo -e "${GREEN}✓ Docker daemon started${NC}"
+        else
+            echo -e "${RED}❌ Could not start Docker daemon${NC}"
+            echo -e "   Please install Docker manually: https://docs.docker.com/engine/install/ubuntu/"
+            exit 1
+        fi
+    fi
+else
+    echo -e "${RED}❌ Docker command not found in PATH${NC}"
+    exit 1
+fi
 
 # Check Docker Compose
 echo ""
