@@ -138,47 +138,73 @@ export PATH="/usr/bin:/usr/local/bin:$PATH"
 # Verify Docker is working
 echo ""
 echo -e "${YELLOW}Verifying Docker installation...${NC}"
-if command -v docker &> /dev/null; then
-    if docker ps &> /dev/null; then
-        echo -e "${GREEN}✓ Docker is working correctly${NC}"
-    else
-        echo -e "${YELLOW}⚠️  Docker installed but daemon not responding${NC}"
-        echo -e "   Attempting to start Docker daemon..."
-        
-        # Try to start docker daemon directly
-        $SUDO dockerd &> /dev/null &
-        sleep 3
-        
-        if docker ps &> /dev/null; then
-            echo -e "${GREEN}✓ Docker daemon started${NC}"
-        else
-            echo -e "${RED}❌ Could not start Docker daemon${NC}"
-            echo -e "   Please install Docker manually: https://docs.docker.com/engine/install/ubuntu/"
-            exit 1
-        fi
-    fi
+
+# Find docker executable
+DOCKER_BIN=""
+if [ -x "/usr/bin/docker" ]; then
+    DOCKER_BIN="/usr/bin/docker"
+elif [ -x "/usr/local/bin/docker" ]; then
+    DOCKER_BIN="/usr/local/bin/docker"
+elif command -v docker &> /dev/null; then
+    DOCKER_BIN="docker"
 else
-    echo -e "${RED}❌ Docker command not found in PATH${NC}"
+    echo -e "${RED}❌ Docker command not found${NC}"
+    echo -e "   Searched in: /usr/bin/docker, /usr/local/bin/docker"
+    echo -e "   Please install Docker manually: https://docs.docker.com/engine/install/ubuntu/"
     exit 1
 fi
 
+echo -e "   Found Docker at: $DOCKER_BIN"
+
+# Test Docker
+if $DOCKER_BIN ps &> /dev/null 2>&1; then
+    echo -e "${GREEN}✓ Docker is working correctly${NC}"
+else
+    echo -e "${YELLOW}⚠️  Docker found but daemon not responding${NC}"
+    echo -e "   Trying to start Docker daemon..."
+    
+    # Wait a bit more
+    sleep 5
+    
+    if $DOCKER_BIN ps &> /dev/null 2>&1; then
+        echo -e "${GREEN}✓ Docker daemon is now running${NC}"
+    else
+        echo -e "${RED}❌ Docker daemon is not running${NC}"
+        echo -e "   Manual fix: sudo systemctl start docker"
+        exit 1
+    fi
+fi
+
+# Set docker command for later use
+DOCKER_CMD="$DOCKER_BIN"
+
 # Check Docker Compose
 echo ""
-if ! docker compose version &> /dev/null; then
-    echo -e "${YELLOW}⚠️  Docker Compose plugin not found, installing manually...${NC}"
+echo -e "${YELLOW}Checking Docker Compose...${NC}"
+
+COMPOSE_CMD=""
+if $DOCKER_CMD compose version &> /dev/null 2>&1; then
+    COMPOSE_CMD="$DOCKER_CMD compose"
+    echo -e "${GREEN}✓ Docker Compose plugin available${NC}"
+elif [ -x "/usr/local/bin/docker-compose" ]; then
+    COMPOSE_CMD="/usr/local/bin/docker-compose"
+    echo -e "${GREEN}✓ Docker Compose standalone found${NC}"
+elif [ -x "/usr/bin/docker-compose" ]; then
+    COMPOSE_CMD="/usr/bin/docker-compose"
+    echo -e "${GREEN}✓ Docker Compose found${NC}"
+else
+    echo -e "${YELLOW}⚠️  Docker Compose not found, installing...${NC}"
     
     # Install Docker Compose as a standalone
     DOCKER_COMPOSE_VERSION="2.24.5"
     $SUDO curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
     $SUDO chmod +x /usr/local/bin/docker-compose
     
-    # Create symlink for 'docker compose' command
-    $SUDO ln -sf /usr/local/bin/docker-compose /usr/bin/docker-compose
-    
-    echo -e "${GREEN}✓ Docker Compose installed manually${NC}"
-else
-    echo -e "${GREEN}✓ Docker Compose is available${NC}"
+    COMPOSE_CMD="/usr/local/bin/docker-compose"
+    echo -e "${GREEN}✓ Docker Compose installed${NC}"
 fi
+
+echo -e "   Using: $COMPOSE_CMD"
 
 # Clone repository if not exists
 echo ""
@@ -236,34 +262,12 @@ echo -e "${YELLOW}🏗️  Building Docker images...${NC}"
 echo "   This may take 5-10 minutes on first run..."
 echo "   (Downloading Go, Node.js, and building both backend and frontend)"
 
-# Ensure we can find docker and docker-compose
-DOCKER_CMD="docker"
-COMPOSE_CMD="docker compose"
-
-# Try different compose commands
-if ! command -v docker &> /dev/null; then
-    if [ -x "/usr/bin/docker" ]; then
-        DOCKER_CMD="/usr/bin/docker"
-        COMPOSE_CMD="/usr/bin/docker compose"
-    else
-        echo -e "${RED}❌ Docker command not found${NC}"
-        echo "   Please restart your shell or run: export PATH=/usr/bin:\$PATH"
-        exit 1
-    fi
-fi
-
-# Check if we can use docker-compose (standalone) instead
-if ! $COMPOSE_CMD version &> /dev/null; then
-    if command -v docker-compose &> /dev/null; then
-        COMPOSE_CMD="docker-compose"
-    fi
-fi
-
-if $COMPOSE_CMD build --no-cache 2>&1 | grep -E "(Step|Successfully)" || $COMPOSE_CMD build --no-cache; then
+if $COMPOSE_CMD build --no-cache; then
     echo -e "${GREEN}✓ Docker images built successfully${NC}"
 else
     echo -e "${RED}❌ Failed to build Docker images${NC}"
     echo "   Check logs above for details"
+    echo "   Command used: $COMPOSE_CMD build"
     exit 1
 fi
 
