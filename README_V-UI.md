@@ -229,10 +229,13 @@ bash <(curl -Ls https://raw.githubusercontent.com/Parsa2769/V-UI2/main/install.s
 ## 🚀 نصب
 
 ### پیش‌نیازها
-- **Docker** 20.10+ و **Docker Compose** 2.0+
-- **2GB RAM** حداقل
+- **سیستم عامل**: Ubuntu 20.04+ / Debian 11+
+- **Docker** 20.10+ و **Docker Compose** 2.0+ (نصب خودکار)
+- **2GB RAM** حداقل (4GB توصیه می‌شود)
 - **10GB** فضای دیسک
-- پورت‌های **80** و **443** آزاد (برای HTTPS)
+- پورت‌های **80** و **443** آزاد
+
+> **📝 نکته**: Ubuntu 25.04 و نسخه‌های جدیدتر هم پشتیبانی می‌شوند (از repository Ubuntu 24.04 استفاده می‌کنند)
 
 ### نصب سریع (Ubuntu/Debian)
 

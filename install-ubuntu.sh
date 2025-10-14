@@ -73,9 +73,18 @@ if ! command -v docker &> /dev/null; then
     
     # Set up the repository
     echo -e "   Setting up Docker repository..."
+    
+    # Get Ubuntu codename (fallback to noble for unsupported versions)
+    UBUNTU_CODENAME=$(lsb_release -cs)
+    # Ubuntu 25.04 and newer may not have Docker repos yet, use noble (24.04)
+    if [[ "$UBUNTU_CODENAME" == "plucky" ]] || [[ ! "$UBUNTU_CODENAME" =~ ^(focal|jammy|noble)$ ]]; then
+        echo -e "   ${YELLOW}Using Ubuntu noble (24.04) repository for compatibility${NC}"
+        UBUNTU_CODENAME="noble"
+    fi
+    
     echo \
       "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-      $(lsb_release -cs) stable" | $SUDO tee /etc/apt/sources.list.d/docker.list > /dev/null
+      $UBUNTU_CODENAME stable" | $SUDO tee /etc/apt/sources.list.d/docker.list > /dev/null
     
     # Install Docker Engine
     echo -e "   Installing Docker Engine (this may take a few minutes)..."
@@ -94,12 +103,36 @@ else
 fi
 
 # Check Docker Compose
+echo ""
 if ! docker compose version &> /dev/null; then
-    echo -e "${RED}❌ Docker Compose plugin not found${NC}"
-    exit 1
+    echo -e "${YELLOW}⚠️  Docker Compose plugin not found, installing manually...${NC}"
+    
+    # Install Docker Compose as a standalone
+    DOCKER_COMPOSE_VERSION="2.24.5"
+    $SUDO curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    $SUDO chmod +x /usr/local/bin/docker-compose
+    
+    # Create symlink for 'docker compose' command
+    $SUDO ln -sf /usr/local/bin/docker-compose /usr/bin/docker-compose
+    
+    echo -e "${GREEN}✓ Docker Compose installed manually${NC}"
+else
+    echo -e "${GREEN}✓ Docker Compose is available${NC}"
 fi
 
-echo -e "${GREEN}✓ Docker Compose is available${NC}"
+# Clone repository if not exists
+echo ""
+if [ ! -d "V-UI2" ]; then
+    echo -e "${YELLOW}📥 Cloning V-UI repository...${NC}"
+    git clone https://github.com/Parsa2769/V-UI2.git
+    cd V-UI2
+    echo -e "${GREEN}✓ Repository cloned${NC}"
+else
+    echo -e "${YELLOW}📁 Entering V-UI directory...${NC}"
+    cd V-UI2
+    git pull
+    echo -e "${GREEN}✓ Repository updated${NC}"
+fi
 
 # Create data directories
 echo ""

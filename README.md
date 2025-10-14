@@ -74,11 +74,14 @@ This will automatically:
 
 ### 📋 Prerequisites
 
-- **OS**: Linux (Debian/Ubuntu recommended), macOS, Windows (WSL2)
-- **Docker**: 20.10+ and Docker Compose 2.0+
-- **Go**: 1.21+ (for development)
-- **Node.js**: 18+ (for frontend development)
-- **Database**: PostgreSQL 14+ (or SQLite for testing)
+- **OS**: Ubuntu 20.04+ / Debian 11+
+- **Docker**: 20.10+ (auto-installed)
+- **Docker Compose**: 2.0+ (auto-installed)
+- **RAM**: 2GB minimum (4GB recommended)
+- **Disk**: 10GB free space
+- **Ports**: 80 and 443 available
+
+> **📝 Note**: Ubuntu 25.04 and newer versions are supported (uses Ubuntu 24.04 repository)
 
 ### 🚀 Quick Start
 

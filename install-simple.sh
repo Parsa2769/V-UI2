@@ -46,9 +46,16 @@ if ! command -v docker &> /dev/null; then
     $SUDO mkdir -p /etc/apt/keyrings
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | $SUDO gpg --dearmor -o /etc/apt/keyrings/docker.gpg
     
+    # Get Ubuntu codename (fallback to noble for unsupported versions)
+    UBUNTU_CODENAME=$(lsb_release -cs)
+    if [[ "$UBUNTU_CODENAME" == "plucky" ]] || [[ ! "$UBUNTU_CODENAME" =~ ^(focal|jammy|noble)$ ]]; then
+        echo -e "   ${YELLOW}Using Ubuntu noble (24.04) repository${NC}"
+        UBUNTU_CODENAME="noble"
+    fi
+    
     echo \
       "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-      $(lsb_release -cs) stable" | $SUDO tee /etc/apt/sources.list.d/docker.list > /dev/null
+      $UBUNTU_CODENAME stable" | $SUDO tee /etc/apt/sources.list.d/docker.list > /dev/null
     
     $SUDO apt-get update -y
     $SUDO apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
@@ -56,6 +63,16 @@ if ! command -v docker &> /dev/null; then
     echo -e "${GREEN}✓ Docker installed${NC}"
 else
     echo -e "${BLUE}[3/7]${NC} ${GREEN}✓ Docker already installed${NC}"
+fi
+
+# Check Docker Compose
+if ! docker compose version &> /dev/null; then
+    echo -e "${YELLOW}Installing Docker Compose manually...${NC}"
+    DOCKER_COMPOSE_VERSION="2.24.5"
+    $SUDO curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    $SUDO chmod +x /usr/local/bin/docker-compose
+    $SUDO ln -sf /usr/local/bin/docker-compose /usr/bin/docker-compose
+    echo -e "${GREEN}✓ Docker Compose installed${NC}"
 fi
 echo ""
 
