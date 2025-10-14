@@ -1,0 +1,77 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "clients": "Clients",
+    "nodes": "Nodes",
+    "inbounds": "Inbounds",
+    "traffic": "Traffic",
+    "audit": "Audit Logs",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "auth": {
+    "login": "Login",
+    "username": "Username",
+    "password": "Password",
+    "twoFactorCode": "2FA Code",
+    "loginSuccess": "Login successful",
+    "loginFailed": "Login failed",
+    "logout": "Logout"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "totalUsers": "Total Users",
+    "activeClients": "Active Clients",
+    "totalTraffic": "Total Traffic",
+    "activeNodes": "Active Nodes"
+  },
+  "users": {
+    "title": "Users",
+    "createUser": "Create User",
+    "editUser": "Edit User",
+    "deleteUser": "Delete User",
+    "username": "Username",
+    "email": "Email",
+    "role": "Role",
+    "status": "Status",
+    "createdAt": "Created At"
+  },
+  "inbounds": {
+    "title": "Inbounds",
+    "createInbound": "Create Inbound",
+    "protocol": "Protocol",
+    "port": "Port",
+    "tag": "Tag",
+    "enable": "Enable",
+    "clients": "Clients",
+    "shareLink": "Share Link",
+    "qrCode": "QR Code"
+  },
+  "protocols": {
+    "vmess": "VMess",
+    "vless": "VLESS",
+    "trojan": "Trojan",
+    "shadowsocks": "Shadowsocks",
+    "wireguard": "WireGuard",
+    "http": "HTTP/SOCKS",
+    "tunnel": "Tunnel"
+  }
+}
