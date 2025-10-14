@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: vui-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: vui
+      POSTGRES_USER: vui
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-changeme_secure_password}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - vui-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vui"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.simple
+      target: backend
+    container_name: vui-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+    volumes:
+      - ./data:/app/data
+      - ./config:/app/config
+      - xray_config:/etc/xray
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - vui-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.simple
+      target: frontend
+    container_name: vui-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - vui-network
+
+volumes:
+  postgres_data:
+    driver: local
+  xray_config:
+    driver: local
+
+networks:
+  vui-network:
+    driver: bridge
