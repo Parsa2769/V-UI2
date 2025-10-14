@@ -27,6 +27,7 @@ frontend/.vite/
 *.test
 *.out
 coverage.txt
+go.sum
 
 # Environment
 .env
