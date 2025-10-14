@@ -18,10 +18,12 @@ echo -e "${GREEN}========================================${NC}"
 echo ""
 
 # Check if running as root
-if [[ $EUID -eq 0 ]]; then
-   echo -e "${RED}❌ This script should NOT be run as root${NC}" 
-   echo "   Please run without sudo"
-   exit 1
+if [[ $EUID -ne 0 ]]; then
+   echo -e "${YELLOW}⚠️  Not running as root. Some commands may require sudo.${NC}"
+   SUDO='sudo'
+else
+   echo -e "${GREEN}✓ Running as root${NC}"
+   SUDO=''
 fi
 
 # Check OS
@@ -42,10 +44,10 @@ echo ""
 echo -e "${YELLOW}📦 Installing system dependencies...${NC}"
 
 # Update package list
-sudo apt-get update -qq
+$SUDO apt-get update -qq
 
 # Install required packages
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+$SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y \
     curl \
     wget \
     unzip \
@@ -64,20 +66,22 @@ if ! command -v docker &> /dev/null; then
     echo -e "${YELLOW}🐳 Installing Docker...${NC}"
     
     # Add Docker's official GPG key
-    sudo mkdir -p /etc/apt/keyrings
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    $SUDO mkdir -p /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | $SUDO gpg --dearmor -o /etc/apt/keyrings/docker.gpg
     
     # Set up the repository
     echo \
       "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-      $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+      $(lsb_release -cs) stable" | $SUDO tee /etc/apt/sources.list.d/docker.list > /dev/null
     
     # Install Docker Engine
-    sudo apt-get update -qq
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin >/dev/null 2>&1
+    $SUDO apt-get update -qq
+    $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin >/dev/null 2>&1
     
-    # Add current user to docker group
-    sudo usermod -aG docker $USER
+    # Add current user to docker group (if not root)
+    if [[ $EUID -ne 0 ]]; then
+        $SUDO usermod -aG docker $USER
+    fi
     
     echo -e "${GREEN}✓ Docker installed successfully${NC}"
     echo -e "${YELLOW}⚠️  Please log out and log back in for docker group changes to take effect${NC}"
