@@ -2,6 +2,29 @@
 
 ## مشکلات رایج نصب
 
+<<<<<<< HEAD
+=======
+### 0. Docker Compose پیدا نمی‌شود (Ubuntu 25.04+)
+
+**علائم:**
+```
+❌ Docker Compose plugin not found
+```
+
+**راه‌حل:**
+اسکریپت جدید به صورت خودکار Docker Compose را نصب می‌کند. اگر دستی می‌خواهید نصب کنید:
+
+```bash
+# نصب دستی Docker Compose:
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+sudo ln -sf /usr/local/bin/docker-compose /usr/bin/docker-compose
+
+# تست:
+docker compose version
+```
+
+>>>>>>> 1a83f2e275b89d9fb23847d0787f205c8d23a281
 ### 1. اسکریپت نصب گیر می‌کند
 
 **علائم:**

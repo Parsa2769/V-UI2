@@ -17,6 +17,7 @@ docs/
 node_modules/
 npm-debug.log
 yarn-error.log
+package-lock.json
 
 # Frontend build
 frontend/dist/
@@ -26,6 +27,7 @@ frontend/.vite/
 *.test
 *.out
 coverage.txt
+go.sum
 
 # Environment
 .env
