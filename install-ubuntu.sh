@@ -18,10 +18,12 @@ echo -e "${GREEN}========================================${NC}"
 echo ""
 
 # Check if running as root
-if [[ $EUID -eq 0 ]]; then
-   echo -e "${RED}❌ This script should NOT be run as root${NC}" 
-   echo "   Please run without sudo"
-   exit 1
+if [[ $EUID -ne 0 ]]; then
+   echo -e "${YELLOW}⚠️  Not running as root. Some commands may require sudo.${NC}"
+   SUDO='sudo'
+else
+   echo -e "${GREEN}✓ Running as root${NC}"
+   SUDO=''
 fi
 
 # Check OS
@@ -42,10 +44,12 @@ echo ""
 echo -e "${YELLOW}📦 Installing system dependencies...${NC}"
 
 # Update package list
-sudo apt-get update -qq
+echo -e "   Updating package list..."
+$SUDO apt-get update -qq 2>&1 | grep -v "^Get:" | grep -v "^Hit:" || true
 
 # Install required packages
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+echo -e "   Installing curl, wget, git, openssl..."
+$SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y \
     curl \
     wget \
     unzip \
@@ -53,8 +57,7 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
     ca-certificates \
     gnupg \
     lsb-release \
-    openssl \
-    >/dev/null 2>&1
+    openssl 2>&1 | grep -E "(Setting up|Unpacking|already)" || true
 
 echo -e "${GREEN}✓ System dependencies installed${NC}"
 
@@ -64,20 +67,25 @@ if ! command -v docker &> /dev/null; then
     echo -e "${YELLOW}🐳 Installing Docker...${NC}"
     
     # Add Docker's official GPG key
-    sudo mkdir -p /etc/apt/keyrings
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    echo -e "   Adding Docker GPG key..."
+    $SUDO mkdir -p /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | $SUDO gpg --dearmor -o /etc/apt/keyrings/docker.gpg
     
     # Set up the repository
+    echo -e "   Setting up Docker repository..."
     echo \
       "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-      $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+      $(lsb_release -cs) stable" | $SUDO tee /etc/apt/sources.list.d/docker.list > /dev/null
     
     # Install Docker Engine
-    sudo apt-get update -qq
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin >/dev/null 2>&1
+    echo -e "   Installing Docker Engine (this may take a few minutes)..."
+    $SUDO apt-get update -qq 2>&1 | grep -v "^Get:" | grep -v "^Hit:" || true
+    $SUDO DEBIAN_FRONTEND=noninteractive apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin 2>&1 | grep -E "(Setting up|Unpacking|already)" || true
     
-    # Add current user to docker group
-    sudo usermod -aG docker $USER
+    # Add current user to docker group (if not root)
+    if [[ $EUID -ne 0 ]]; then
+        $SUDO usermod -aG docker $USER
+    fi
     
     echo -e "${GREEN}✓ Docker installed successfully${NC}"
     echo -e "${YELLOW}⚠️  Please log out and log back in for docker group changes to take effect${NC}"
@@ -132,22 +140,25 @@ fi
 # Build and start services
 echo ""
 echo -e "${YELLOW}🏗️  Building Docker images...${NC}"
-echo "   This may take a few minutes on first run..."
+echo "   This may take 5-10 minutes on first run..."
+echo "   (Downloading Go, Node.js, and building both backend and frontend)"
 
-if docker compose build --no-cache >/dev/null 2>&1; then
+if docker compose build --no-cache 2>&1 | grep -E "(Step|Successfully)" || docker compose build --no-cache; then
     echo -e "${GREEN}✓ Docker images built successfully${NC}"
 else
     echo -e "${RED}❌ Failed to build Docker images${NC}"
+    echo "   Check logs above for details"
     exit 1
 fi
 
 echo ""
 echo -e "${YELLOW}🚀 Starting services...${NC}"
 
-if docker compose up -d; then
+if docker compose up -d 2>&1; then
     echo -e "${GREEN}✓ Services started successfully${NC}"
 else
     echo -e "${RED}❌ Failed to start services${NC}"
+    echo "   Run: docker compose logs"
     exit 1
 fi
 

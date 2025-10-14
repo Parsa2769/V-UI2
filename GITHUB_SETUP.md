@@ -33,12 +33,13 @@ git init
 git add .
 
 # اولین commit
-git commit -m "Initial commit: 3X-UI Modern v2.0.0
+git commit -m "Initial commit: V-UI v2.0.0
 
 - Complete backend with Go 1.21
-- Modern React frontend with TypeScript
+- Modern React 18 frontend with TypeScript
 - JWT authentication + 2FA + RBAC
-- Docker Compose setup
+- All 13 pages fully implemented
+- Docker Compose ready
 - Comprehensive documentation
 - CI/CD pipelines
 - Production ready"
@@ -95,7 +96,7 @@ Settings → Branches → Add rule:
 1. به tab "Releases" برید
 2. "Create a new release" کلیک کنید
 3. Tag version: `v2.0.0`
-4. Release title: `3X-UI Modern v2.0.0 - Initial Release`
+4. Release title: `V-UI v2.0.0 - Initial Release`
 5. Description رو از CHANGELOG.md کپی کنید
 6. "Publish release" کلیک کنید
 

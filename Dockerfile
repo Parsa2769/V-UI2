@@ -28,7 +28,7 @@ WORKDIR /build
 
 # Copy package files
 COPY frontend/package*.json ./
-RUN npm ci --only=production
+RUN npm ci
 
 # Copy source code
 COPY frontend/ ./

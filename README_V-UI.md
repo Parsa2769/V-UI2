@@ -37,6 +37,34 @@
 
 ---
 
+## 🚀 نصب سریع
+
+نصب با یک دستور:
+
+```bash
+bash <(curl -Ls https://raw.githubusercontent.com/Parsa2769/V-UI2/main/install.sh)
+```
+
+این دستور به صورت خودکار:
+- ✅ Docker و Docker Compose را نصب می‌کند
+- ✅ پروژه را کلون می‌کند
+- ✅ Secret های امن تولید می‌کند
+- ✅ تمام سرویس‌ها را اجرا می‌کند
+
+### دسترسی به پنل
+
+پس از نصب:
+- **پنل وب**: `http://YOUR-SERVER-IP`
+- **مستندات API**: `http://YOUR-SERVER-IP/docs`
+
+**اطلاعات ورود پیش‌فرض:**
+- نام کاربری: `admin`
+- رمز عبور: `admin`
+
+⚠️ **مهم**: بلافاصله پس از اولین ورود رمز عبور را تغییر دهید!
+
+---
+
 ## 📋 فهرست مطالب
 
 - [ویژگی‌ها](#-ویژگیها)
@@ -465,8 +493,9 @@ npm test
 
 ## 🙏 تشکر
 
-- پروژه اصلی: [MHSanaei/3x-ui](https://github.com/MHSanaei/3x-ui)
-- [Xray-core](https://github.com/XTLS/Xray-core)
+- **V-UI** - پنل مدیریت مدرن Xray با معماری تمیز و امن
+- الهام گرفته از: [MHSanaei/3x-ui](https://github.com/MHSanaei/3x-ui)
+- هسته اصلی: [Xray-core](https://github.com/XTLS/Xray-core)
 - تمام مشارکت‌کنندگان open-source
 
 ---
