@@ -21,31 +21,7 @@
 
 **V-UI** is a powerful, modern web-based control panel for managing Xray-core with complete protocol support. Built with Go and React, it provides enterprise-grade features including multi-protocol support, advanced traffic management, SSL certificate automation, Telegram bot integration, and much more.
 
-V-UI offers a completely redesigned architecture with enhanced security, modern UI, and production-ready infrastructure.
-
-### 🚀 Quick Install
-
-Install with one command:
-
-```bash
-bash <(curl -Ls https://raw.githubusercontent.com/Parsa2769/V-UI2/main/install.sh)
-```
-
-This will automatically:
-- ✅ Install Docker & Docker Compose
-- ✅ Clone the repository
-- ✅ Generate secure secrets
-- ✅ Start all services
-
-**Access the panel:**
-- Web Panel: `http://YOUR-SERVER-IP`
-- API Docs: `http://YOUR-SERVER-IP/docs`
-
-**Default Login:**
-- Username: `admin`
-- Password: `admin`
-
-⚠️ **IMPORTANT**: Change the default password immediately after first login!
+Based on the popular [3x-ui](https://github.com/MHSanaei/3x-ui) project, V-UI offers a completely redesigned architecture with enhanced security, modern UI, and production-ready infrastructure.
 
 ### ⚠️ Legal Notice
 
@@ -119,7 +95,7 @@ Default credentials:
 
 # Build backend
 cd backend
-go build -o ../bin/v-ui ./cmd/server
+go build -o ../bin/3x-ui-modern ./cmd/server
 
 # Build frontend
 cd ../frontend
@@ -128,7 +104,7 @@ npm run build
 
 # Start server
 cd ..
-./bin/v-ui --config config.yaml
+./bin/3x-ui-modern --config config.yaml
 ```
 
 ### 🏗️ Architecture
@@ -149,7 +125,7 @@ cd ..
 ### 📁 Project Structure
 
 ```
-V-UI2/
+3x-ui-modern/
 ├── backend/                 # Go backend
 │   ├── cmd/                # Entry points
 │   ├── internal/           # Private application code
@@ -258,22 +234,14 @@ Key endpoints:
 7. **Review audit logs** regularly
 8. **Limit API access** with rate limiting and RBAC
 
-### 🔄 Data Import
+### 🔄 Migration from Original 3x-ui
 
 ```bash
-# V-UI supports importing configurations
-# Use the backup/restore feature in settings
-# Or import via API endpoints
-```
-
-### 🔄 Previous Installation Data
-
-```bash
-# Import existing data
+# Backup existing data
 ./scripts/backup.sh
 
-# Use the backup/restore feature
-# Or import via API endpoints
+# Run migration tool
+./scripts/migrate-from-original.sh --source /path/to/old/db
 
 # Verify data
 ./scripts/verify-migration.sh
@@ -289,10 +257,8 @@ GPL-3.0 License - see [LICENSE](LICENSE) file.
 
 ### 🙏 Acknowledgments
 
-- **V-UI** - Modern Xray management panel with clean architecture
-- Inspired by: [MHSanaei/3x-ui](https://github.com/MHSanaei/3x-ui)
-- Core engine: [Xray-core](https://github.com/XTLS/Xray-core)
-- Open source community contributors
+- Original project: [MHSanaei/3x-ui](https://github.com/MHSanaei/3x-ui)
+- [Xray-core](https://github.com/XTLS/Xray-core)
 
 ---
 
@@ -300,7 +266,7 @@ GPL-3.0 License - see [LICENSE](LICENSE) file.
 
 ### 🚀 معرفی
 
-**V-UI** یک پنل کنترل وب مدرن و قدرتمند برای مدیریت پروتکل‌های Xray با معماری تمیز، رابط کاربری پیشرفته و قابلیت‌های سازمانی است. این پروژه با Go و React ساخته شده و زیرساخت آماده برای تولید دارد.
+یک فورک مدرن و کامل از [MHSanaei/3x-ui](https://github.com/MHSanaei/3x-ui) با رابط کاربری پیشرفته، قابلیت‌های جامع و زیرساخت آماده برای تولید. این پروژه یک پنل کنترل وب قدرتمند برای مدیریت پروتکل‌های Xray با قابلیت‌های سازمانی ارائه می‌دهد.
 
 ### ⚠️ اطلاعیه قانونی
 
@@ -402,22 +368,14 @@ npm run test:e2e
 7. **لاگ‌های ممیزی را به طور منظم بررسی کنید**
 8. **دسترسی API را محدود کنید** با rate limiting و RBAC
 
-### 🔄 وارد کردن داده‌ها
+### 🔄 مهاجرت از 3x-ui اصلی
 
 ```bash
-# V-UI از import کانفیگ پشتیبانی می‌کند
-# از قابلیت backup/restore در تنظیمات استفاده کنید
-# یا از طریق API endpoint ها import کنید
-```
-
-### 🔄 داده‌های نصب قبلی
-
-```bash
-# وارد کردن داده‌های موجود
+# پشتیبان‌گیری از داده‌های موجود
 ./scripts/backup.sh
 
-# از قابلیت backup/restore استفاده کنید
-# یا از طریق API endpoint ها import کنید
+# اجرای ابزار مهاجرت
+./scripts/migrate-from-original.sh --source /path/to/old/db
 
 # تأیید داده‌ها
 ./scripts/verify-migration.sh
@@ -433,10 +391,8 @@ npm run test:e2e
 
 ### 🙏 قدردانی
 
-- **V-UI** - پنل مدیریت مدرن Xray با معماری تمیز
-- الهام گرفته از: [MHSanaei/3x-ui](https://github.com/MHSanaei/3x-ui)
-- هسته اصلی: [Xray-core](https://github.com/XTLS/Xray-core)
-- مشارکت‌کنندگان open source
+- پروژه اصلی: [MHSanaei/3x-ui](https://github.com/MHSanaei/3x-ui)
+- [Xray-core](https://github.com/XTLS/Xray-core)
 
 ---
 
