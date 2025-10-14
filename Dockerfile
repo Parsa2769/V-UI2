@@ -14,6 +14,8 @@ RUN go mod download && go mod tidy
 
 # Copy source code (including the new go.sum)
 COPY backend/ ./
+# Ensure go.sum is up to date with all dependencies
+RUN go mod tidy && go mod download
 
 # Build backend
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
