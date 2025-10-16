@@ -145,11 +145,12 @@ echo ""
 echo -e "${BLUE}[3/7]${NC} ${YELLOW}Cloning V-UI repository...${NC}"
 
 if [ -d "V-UI2" ]; then
-    echo -e "   Directory exists, pulling latest..."
+    echo -e "   Directory exists, checking out and pulling latest from the correct branch..."
     cd V-UI2
+    git checkout feat/fix-installation-and-build-issues
     git pull
 else
-    git clone https://github.com/Parsa2769/V-UI2.git
+    git clone --branch feat/fix-installation-and-build-issues https://github.com/Parsa2769/V-UI2.git
     cd V-UI2
     echo -e "${GREEN}✓ Repository cloned${NC}"
 fi
