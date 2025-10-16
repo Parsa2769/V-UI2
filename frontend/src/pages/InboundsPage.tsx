@@ -24,6 +24,7 @@ export default function InboundsPage() {
   const { user } = useAuthStore()
   const [inbounds, setInbounds] = useState<Inbound[]>([])
   const [loading, setLoading] = useState(true)
+  const [showCreateModal, setShowCreateModal] = useState(false)
 
   useEffect(() => {
     fetchInbounds()
