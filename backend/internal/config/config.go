@@ -86,6 +86,48 @@ type RateLimitConfig struct {
 	Window   time.Duration
 }
 
+type SessionConfig struct {
+	MaxAge   time.Duration
+	Path     string
+	Domain   string
+	Secure   bool
+	HttpOnly bool
+	SameSite string
+}
+
+type BackupConfig struct {
+	Enabled  bool
+	Schedule string
+	Path     string
+	Keep     int
+}
+
+type NotificationConfig struct {
+	EmailEnabled    bool
+	SlackEnabled    bool
+	TelegramEnabled bool
+}
+
+type DefaultsConfig struct {
+	UserTraffic    int
+	UserExpiryDays int
+}
+
+type TelegramConfig struct {
+	Enabled bool
+	Token   string
+	AdminID int64
+}
+
+type CertConfig struct {
+	Provider  string
+	Email     string
+	Domains   []string
+	CertPath  string
+	KeyPath   string
+	AutoRenew bool
+}
+
 func Load() (*Config, error) {
 	v := viper.New()
 

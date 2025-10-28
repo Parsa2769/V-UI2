@@ -36,7 +36,7 @@ func NewServices(database *db.Database, cfg *config.Config, log *zap.Logger) *Se
 		Traffic:      NewTrafficService(database, log),
 		Audit:        NewAuditService(database, log),
 		Inbound:      NewInboundService(database, log),
-		Subscription: NewSubscriptionService(database, log),
+		Subscription: NewSubscriptionService(database, log, NewInboundService(database, log)),
 		Template:     NewTemplateService(database, log),
 		Backup:       NewBackupService(database, log, cfg.Backup.Path),
 	}

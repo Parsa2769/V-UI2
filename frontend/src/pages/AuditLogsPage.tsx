@@ -79,7 +79,7 @@ export default function AuditLogsPage() {
     return 'text-gray-600 bg-gray-100 dark:bg-gray-900 dark:text-gray-200'
   }
 
-  const getActionIcon = (action: string) => {
+  const getActionIcon = (_action: string) => {
     return <Activity className="w-4 h-4" />
   }
 

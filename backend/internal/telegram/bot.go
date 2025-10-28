@@ -6,7 +6,6 @@ import (
 	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
-	"github.com/google/uuid"
 	"github.com/v-ui/backend/internal/config"
 	"github.com/v-ui/backend/internal/service"
 	"go.uber.org/zap"
@@ -22,12 +21,12 @@ type Bot struct {
 
 // NewBot creates a new Telegram bot
 func NewBot(cfg *config.TelegramConfig, logger *zap.Logger, services *service.Services) (*Bot, error) {
-	bot, err := tgbotapi.NewBotAPI(cfg.BotToken)
+	bot, err := tgbotapi.NewBotAPI(cfg.Token)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create bot: %w", err)
 	}
 
-	bot.Debug = cfg.Debug
+	bot.Debug = cfg.Enabled
 
 	logger.Info("Telegram bot authorized", zap.String("username", bot.Self.UserName))
 
@@ -158,7 +157,7 @@ User: %s
 
 // handleUsers handles /users command
 func (b *Bot) handleUsers(chatID int64) {
-	users, _, err := b.services.User.ListUsers(1, 10, "", "")
+	users, _, err := b.services.User.List(0, 10)
 	if err != nil {
 		b.sendMessage(chatID, "❌ Failed to fetch users")
 		return
@@ -169,7 +168,7 @@ func (b *Bot) handleUsers(chatID int64) {
 
 	for _, user := range users {
 		status := "🟢"
-		if !user.Enable {
+		if !user.Enabled {
 			status = "🔴"
 		}
 		sb.WriteString(fmt.Sprintf("%s %s - %s\n", status, user.Username, user.Role))
@@ -251,19 +250,12 @@ func (b *Bot) sendMessage(chatID int64, text string) {
 // isAuthorized checks if a user is authorized to use the bot
 func (b *Bot) isAuthorized(userID int64) bool {
 	// Check if user ID is in authorized list
-	for _, id := range b.cfg.AuthorizedUsers {
-		if id == userID {
-			return true
-		}
-	}
-	return false
+	return b.cfg.AdminID == userID
 }
 
 // SendNotification sends a notification to all authorized users
 func (b *Bot) SendNotification(message string) error {
-	for _, chatID := range b.cfg.AuthorizedUsers {
-		b.sendMessage(chatID, message)
-	}
+	b.sendMessage(b.cfg.AdminID, message)
 	return nil
 }
 

@@ -53,10 +53,7 @@ func (h *TemplateHandler) CreateTemplate(c *gin.Context) {
 	}
 
 	// Audit log
-	h.auditService.Log(user.ID, "template.create", c.ClientIP(), gin.H{
-		"name": template.Name,
-		"type": template.Type,
-	})
+	h.auditService.Log(user.ID, "template.create", template.Name, "Template created", c.ClientIP(), c.Request.UserAgent())
 
 	c.JSON(http.StatusCreated, template)
 }
@@ -143,9 +140,7 @@ func (h *TemplateHandler) UpdateTemplate(c *gin.Context) {
 	}
 
 	// Audit log
-	h.auditService.Log(user.ID, "template.update", c.ClientIP(), gin.H{
-		"id": id.String(),
-	})
+	h.auditService.Log(user.ID, "template.update", id.String(), "Template updated", c.ClientIP(), c.Request.UserAgent())
 
 	template, _ := h.templateService.GetTemplate(id)
 	c.JSON(http.StatusOK, template)
@@ -176,9 +171,7 @@ func (h *TemplateHandler) DeleteTemplate(c *gin.Context) {
 	}
 
 	// Audit log
-	h.auditService.Log(user.ID, "template.delete", c.ClientIP(), gin.H{
-		"id": id.String(),
-	})
+	h.auditService.Log(user.ID, "template.delete", id.String(), "Template deleted", c.ClientIP(), c.Request.UserAgent())
 
 	c.Status(http.StatusNoContent)
 }
@@ -230,9 +223,7 @@ func (h *TemplateHandler) ApplyTemplate(c *gin.Context) {
 	}
 
 	// Audit log
-	h.auditService.Log(user.ID, "template.apply", c.ClientIP(), gin.H{
-		"template_id": id.String(),
-	})
+	h.auditService.Log(user.ID, "template.apply", id.String(), "Template applied", c.ClientIP(), c.Request.UserAgent())
 
 	c.JSON(http.StatusOK, inbound)
 }

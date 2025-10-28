@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { TrendingUp, TrendingDown, Activity, Calendar, Download, Upload } from 'lucide-react'
+import { TrendingUp, Activity, Calendar, Download, Upload } from 'lucide-react'
 import { api } from '@/lib/api'
 import { toast } from 'sonner'
 

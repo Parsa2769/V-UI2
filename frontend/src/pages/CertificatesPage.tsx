@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Plus, Download, Trash2, RefreshCw, Shield, Calendar } from 'lucide-react'
+import { Plus, Trash2, RefreshCw, Shield, Calendar } from 'lucide-react'
 import { api } from '@/lib/api'
 import { toast } from 'sonner'
 

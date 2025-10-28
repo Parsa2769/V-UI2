@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/v-ui/backend/internal/auth"
+
 	"github.com/v-ui/backend/internal/config"
 	"github.com/v-ui/backend/internal/middleware"
 	"github.com/v-ui/backend/internal/service"
@@ -61,7 +61,7 @@ func (r *Router) Setup() {
 		}
 
 		// Create JWT manager for middleware
-		jwtManager := auth.NewJWTManager(
+		jwtManager := r.services.Auth.NewJWTManager(
 			r.cfg.Auth.JWTSecret,
 			r.cfg.Auth.JWTRefreshSecret,
 			r.cfg.Auth.AccessExpiry,
